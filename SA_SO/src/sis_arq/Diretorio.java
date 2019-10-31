@@ -1,7 +1,12 @@
 package sis_arq;
 
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
+
+
+
+
 
 
 public class Diretorio {
@@ -79,10 +84,60 @@ public class Diretorio {
 		this.pai = pai;
 	}
 
+	public void atualizaTamanho() {
+		this.tamanho = 2;
+		for (int i = 0; i < arquivos.size(); i++)
+			this.tamanho += arquivos.get(i).getTamanho();
+		for (int i = 0; i < diretorios.size(); i++)
+			this.tamanho += diretorios.get(i).getTamanho();
+		if (this.pai != null)
+			pai.atualizaTamanho();
+	}
+	
+	public void adicionaDiretorio(Diretorio dir) {
+		this.diretorios.add(dir);
+		atualizaTamanho();
+	}
+	
+	public void removeDiretorio(Diretorio dir) {
+		this.diretorios.remove(dir);
+		atualizaTamanho();
+	}
+	
+	public void adicionaArquivo(Arquivo arq) {
+		this.arquivos.add(arq);
+		atualizaTamanho();
+	}
+	public void removeArquivo(Arquivo arq) {
+		this.arquivos.remove(arq);
+		atualizaTamanho();
+	}
 	@Override
 	public String toString() {
-		return "Diretorio [nome=" + nome + ", dataDeCriacao=" + dataDeCriacao + ", tamanho=" + tamanho + ", arquivos="
-				+ arquivos + ", diretorios=" + diretorios + ", caminho=" + caminho + ", pai=" + pai + "]";
+		String retorno = "----------------------------------------------------------------\n";
+		retorno += "Diretório " + this.nome + ":\n";
+		retorno += "\tTamanho: " + this.tamanho + "\n";
+		retorno += "\tData de criação: " + this.dataDeCriacao + "\n";
+		if (arquivos.size() != 0) {
+			retorno += "\tArquivos do diretório:\n\n";
+			for (int i = 0; i < arquivos.size(); i++)
+				retorno += arquivos.get(i).toString();
+		}
+		if (diretorios.size() != 0) {
+			retorno += "\tDiretórios dentro desse diretório:\n";
+			Diretorio dir;
+			for (int i = 0; i < diretorios.size(); i++) {
+				dir = diretorios.get(i);
+				retorno += "\t*****************************************\n";
+				retorno += "\t\tDiretório " + dir.getNome() + "\n";
+				retorno += "\t\t\tTamanho: " + dir.getTamanho() + "\n";
+				retorno += "\t\t\tData de criação: " + dir.getDataDeCriacao() + "\n";
+				retorno += "\t*****************************************\n";
+			}
+		}
+		retorno += "----------------------------------------------------------------\n";
+		
+		return retorno;
 	}
 
 }
